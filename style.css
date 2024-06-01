@@ -1,0 +1,110 @@
+.jumbotron{
+    padding-top: 7rem;
+    background-color: #0f4a85;
+}
+
+#project{
+    background-color: #0f4a85;    
+}
+
+section{
+    padding-top: 7rem;
+}
+
+.nav-link{
+    color: rebeccapurple;
+}
+
+/* Animation for About Me */
+.from-left {
+    opacity: 0;
+    transform: translateX(-200px);
+    transition: all 1.3s ease-in-out;
+}
+
+.from-right {
+    opacity: 0;
+    transform: translateX(200px);
+    transition: all 2s ease-in-out;
+}
+.from-halo {
+    opacity: 0;
+    transform: translateX(200px);
+    transition: all 0.8s ease-in-out;
+}
+
+.from-mana {
+    opacity: 0;
+    transform: translateX(200px);
+    transition: all 1.7s ease-in-out;
+}
+
+.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/*Animasi project*/
+.from-project {
+    opacity: 0;
+    transform: translateY(280px);
+    transition: all 0.7s ease-in-out;
+}
+
+.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* animasi logo sosmed */
+@keyframes float {
+    0% {
+        transform: translatey(0px);
+    }
+    50% {
+        transform: translatey(-10px);
+    }
+    100% {
+        transform: translatey(0px);
+    }
+}
+@keyframes float2 {
+    0% {
+        transform: translatey(0px);
+    }
+    50% {
+        transform: translatey(10px);
+    }
+    100% {
+        transform: translatey(0px);
+    }
+}
+
+.animated-logo {
+    animation: float 3s ease-in-out infinite;
+    transition: filter 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+.animated-logo:hover{
+    filter: brightness(0) saturate(100%) invert(23%) sepia(84%) saturate(7482%) hue-rotate(239deg) brightness(94%) contrast(117%);
+    transform: scale(1.1);
+
+}
+
+.animated-logo2 {
+    animation: float2 3s ease-in-out infinite;
+    transition: filter 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+.animated-logo2:hover{
+    filter: brightness(0) saturate(100%) invert(23%) sepia(84%) saturate(7482%) hue-rotate(239deg) brightness(94%) contrast(117%);
+    transform: scale(1.1);
+}
+
+/* Animasi huruf demi huruf (mesin ketik) */
+.typing-animation {
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: .15em solid orange;
+    font-size: inherit; /* Sesuaikan ukuran font */
+    margin: 0;
+    display: inline-block;
+}

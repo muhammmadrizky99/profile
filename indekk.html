@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="librarycss/sweetalert2.min.css">
+</head>
+
+
+<body id="home">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow fixed-top">
+        <div class="container">
+            <!-- <a class="navbar-brand " href="#">My Profile Website</a> -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link " aria-current="page" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " aria-current="page" href="#about">About me</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#project">Project</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#followme">Follow me</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <section class="jumbotron text-center" id="home">
+        <img src="image/yy.jpg" alt="" width="200" class="rounded-circle img-thumbnail">
+        <h1 class="display-4 text-white">Muhammad Rizky</h1>
+
+        <p class="lead text-white mb-5">
+            <span class="typing-animation" id="typing-text"></span>
+        </p>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path fill="#fff" fill-opacity="1"
+                d="M0,160L130.9,256L261.8,64L392.7,192L523.6,64L654.5,288L785.5,288L916.4,64L1047.3,128L1178.2,32L1309.1,192L1440,288L1440,320L1309.1,320L1178.2,320L1047.3,320L916.4,320L785.5,320L654.5,320L523.6,320L392.7,320L261.8,320L130.9,320L0,320Z">
+            </path>
+        </svg>
+
+    </section>
+
+
+    <section class="about" id="about">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-md mb-3">
+                    <h2>About Me</h2>
+                </div>
+            </div>
+            <div class="row  fs-5 mb-3">
+                <div class="col-md-4 from-left">
+                    <img src="image/prf2.jpg" width="260" alt="" style="margin-left: 60px; margin-top:10px"
+                        class="animated-logo">
+                </div>
+
+                <div class="col-md from-right">
+                    <h1 style="color: blueviolet;" class="from-halo">Halo !</h1>
+                    <p>Nama saya <b style="color: #0f4a85;">Muhammad Rizky</b> , seorang anak yang berasal dari Tanah
+                        Datar, Sumatera Barat.
+                        <br>
+                        Yang merupakan lulusan tahun 2022 dari SMKN 1 Batipuh dengan jurusan Multimedia. <br>
+                        Dan sekarang saya sedang menjalani kuliah dengan jurusan Teknologi Informasi, <br>
+                        Prodi Teknologi Rekayasa Perangkat Lunak (TRPL) di Politeknik Negeri Padang.
+                    </p>
+
+                    <br>
+                    <button type="button" class="btn btn-outline-info from-mana"
+                        style="color: rgb(50, 23, 167); border-color: blueviolet;" onclick="showAlert()">
+                        <b>Salam kenal semuanya!</b>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path fill="#0f4a85" fill-opacity="1"
+                d="M0,192L130.9,128L261.8,192L392.7,256L523.6,160L654.5,288L785.5,288L916.4,64L1047.3,224L1178.2,192L1309.1,128L1440,128L1440,320L1309.1,320L1178.2,320L1047.3,320L916.4,320L785.5,320L654.5,320L523.6,320L392.7,320L261.8,320L130.9,320L0,320Z">
+            </path>
+        </svg>
+    </section>
+
+
+    <section id="project" class="project">
+        <div class="container"">
+            <div class=" row text-center mb-5">
+            <div class="col-md">
+                <button type="button" class="btn btn-outline-light" onclick="showAlert2()">
+                    <h3>My Project</h3>
+                </button>
+            </div>
+        </div>
+
+
+        <div class="row justify-content-center from-project">
+            <div class="col-md-4 mb-3 ">
+                <div class="card">
+                    <img src="image/pro1.png" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h4>Sistem Informasi CRUD</h4>
+                        <p class="card-text">Sebuah project ujian akhir semester, menggunakan PHP dasar.
+                            Membuat sebuah sistem informasi CRUD (create read update delete) dan juga login user
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <img src="image/pro2.png" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h4>IT Ventory</h4>
+                        <p class="card-text">Sebuah project PBL (Project Base Learning) menggunakan laravel, membuat
+                            sistem informasi
+                            inventaris barang di labor TI
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <img src="image/pro3.png" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h4>Website portfolio</h4>
+                        <p class="card-text">Membuat sebuah website profile atau portfolio menggunakan bahasa
+                            pemrograman
+                            HTML, CSS, dan juga javascript
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="image/proo7.png" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h4>Age Calculator</h4>
+                        <p class="card-text">Sebuah project yang berfungsi untuk menghitung umur pengguna sesuai
+                            tanggal, bulan, tahun yang diinputkan.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <img src="image/pro4.png" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h4>UI Design Food Delivery</h4>
+                        <p class="card-text">Design & Prototype Food Delivery mengunakan figma</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="image/proo5.png" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h4>UI Design SikiTube (Youtube)</h4>
+                        <p class="card-text">Membuat design UI & Prototype aplikasi rujukan Youtube menggunakan figma
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="image/pro6.png" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h4>UI Design "Cafe Ujung Pandang"</h4>
+                        <p class="card-text">Membuat design UI & Prototype untuk aplikasi pemesanan di sebuah cafe
+                            di kota Padang
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="image/proo8.png" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h4>Desain Poster Lomba </h4>
+                        <p class="card-text">Membuat design poster lomba pada Pekan Kreativitas Mahasiswa di Politeknik Negeri Padang
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="image/pro9.png" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h4>Desain Poster Semarak Ramadhan </h4>
+                        <p class="card-text">Membuat design poster open donasi dan juga acara semarak ramadhan di Politeknik Negeri Padang
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path fill="#ffff" fill-opacity="1"
+                d="M0,0L130.9,128L261.8,128L392.7,288L523.6,224L654.5,32L785.5,160L916.4,96L1047.3,192L1178.2,32L1309.1,128L1440,32L1440,320L1309.1,320L1178.2,320L1047.3,320L916.4,320L785.5,320L654.5,320L523.6,320L392.7,320L261.8,320L130.9,320L0,320Z">
+            </path>
+        </svg>
+    </section>
+
+
+    <section class="followme " id="followme">
+        <div class="container ">
+            <div class="row text-center mb-4">
+                <div class="col-md mb-3 ">
+                    <h3>Follow me</h3>
+                    <h6 style="color: #636363;">Instagram | E-Mail | Linkedin | Github</h6>
+                </div>
+            </div>
+
+            <div class="row  mb-5 ">
+                <div class="col mx-3 d-flex justify-content-center ">
+                    <a href="https://www.instagram.com/muhammadriizzky___/" class="mx-3">
+                        <img src="image/instagram.svg" style="width: 30px;" alt="" class="animated-logo">
+                    </a>
+                    <a href="mailto:rizky.btr99@gmail.com" class="mx-3">
+                        <img src="image/mail.svg" style="width: 30px;" alt="" class="animated-logo2">
+                    </a>
+                    <a href="https://www.linkedin.com/in/muhammad-rizky-99228125b/" class="mx-3">
+                        <img src="image/linkedin.svg" style="width: 30px;" alt="" class="animated-logo">
+                    </a>
+                    <a href="https://github.com/muhammmadrizky99" class="mx-3">
+                        <img src="image/github.svg" style="width: 30px;" alt="" class="animated-logo2">
+                    </a>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+               
+                
+            </div>
+        </div>
+    </section>
+
+
+
+    <script src="jees/libraryjs/sweetalert2.all.min.js"></script>
+    <script src="jees/tombol.js"> </script>
+    <script src="jees/switchalert.js"></script>
+    <script src="jees/smooth.js"></script>
+    <script src="jees/ketik.js"></script>
+
+
+</body>
+<footer>
+
+    <nav class="navbar navbar-expand-lg navbar-dark shadow" style="background-color: #0f4a85;">
+        <div class="container justify-content-center">
+
+            <a class="navbar-brand " href="#">
+                <h6>&copy; Muhammad Rizky | All rights reserved</h6>
+            </a>
+        </div>
+
+
+    </nav>
+
+</footer>
+
+</html>
