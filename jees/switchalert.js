@@ -15,4 +15,12 @@ function showAlert2() {
         confirmButtonText: 'OK'
     });
 }
+function showAlert3() {
+    Swal.fire({
+        title: 'My Certificate',
+        text: 'Ini gambaran beberapa sertifikat saya',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+}
 
