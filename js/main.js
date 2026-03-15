@@ -1,0 +1,331 @@
+/* ============================================
+   Muhammad Rizky — Portfolio JavaScript
+   Particles | Typing | Animations | Filtering
+   ============================================ */
+
+(function () {
+    'use strict';
+
+    // ---- Preloader ----
+    window.addEventListener('load', () => {
+        const preloader = document.getElementById('preloader');
+        const statusEl = preloader.querySelector('.loader-status');
+        const statusTexts = ['Initializing...', 'Loading assets...', 'Almost ready...', 'Welcome!'];
+        let statusIdx = 0;
+
+        const statusInterval = setInterval(() => {
+            statusIdx++;
+            if (statusIdx < statusTexts.length) {
+                statusEl.textContent = statusTexts[statusIdx];
+            }
+        }, 600);
+
+        setTimeout(() => {
+            clearInterval(statusInterval);
+            preloader.classList.add('hidden');
+        }, 2500);
+    });
+
+    // ---- Particle Canvas ----
+    const canvas = document.getElementById('particleCanvas');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null };
+        let animationFrame;
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.offsetWidth;
+            canvas.height = canvas.parentElement.offsetHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.6;
+                this.speedY = (Math.random() - 0.5) * 0.6;
+                this.opacity = Math.random() * 0.5 + 0.1;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (mouse.x !== null) {
+                    const dx = mouse.x - this.x;
+                    const dy = mouse.y - this.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 120) {
+                        this.x -= dx * 0.01;
+                        this.y -= dy * 0.01;
+                    }
+                }
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(108, 99, 255, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const count = Math.min(Math.floor((canvas.width * canvas.height) / 12000), 100);
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function connectParticles() {
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a + 1; b < particles.length; b++) {
+                    const dx = particles[a].x - particles[b].x;
+                    const dy = particles[a].y - particles[b].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
+                        const opacity = 0.08 * (1 - dist / 150);
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(108, 99, 255, ${opacity})`;
+                        ctx.lineWidth = 0.6;
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            connectParticles();
+            animationFrame = requestAnimationFrame(animateParticles);
+        }
+
+        resizeCanvas();
+        initParticles();
+        animateParticles();
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+    }
+
+    // ---- Cursor Glow ----
+    const cursorGlow = document.getElementById('cursorGlow');
+    if (cursorGlow && window.innerWidth > 768) {
+        document.addEventListener('mousemove', (e) => {
+            cursorGlow.style.left = e.clientX + 'px';
+            cursorGlow.style.top = e.clientY + 'px';
+        });
+    }
+
+    // ---- Typing Animation ----
+    const typingEl = document.getElementById('typingText');
+    if (typingEl) {
+        const texts = [
+            'Software Engineer',
+            'UI/UX Designer',
+            'Full Stack Developer',
+            'Machine Learning Enthusiast',
+            'Graphic Designer',
+            'Creative Problem Solver'
+        ];
+        let textIdx = 0;
+        let charIdx = 0;
+        let isDeleting = false;
+
+        function type() {
+            const current = texts[textIdx];
+            if (isDeleting) {
+                typingEl.textContent = current.substring(0, charIdx - 1);
+                charIdx--;
+            } else {
+                typingEl.textContent = current.substring(0, charIdx + 1);
+                charIdx++;
+            }
+
+            let speed = isDeleting ? 40 : 80;
+
+            if (!isDeleting && charIdx === current.length) {
+                speed = 2200;
+                isDeleting = true;
+            } else if (isDeleting && charIdx === 0) {
+                isDeleting = false;
+                textIdx = (textIdx + 1) % texts.length;
+                speed = 400;
+            }
+
+            setTimeout(type, speed);
+        }
+
+        type();
+    }
+
+    // ---- Counter Animation ----
+    function animateCounters() {
+        document.querySelectorAll('.stat-number').forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-count'));
+            const duration = 2000;
+            const step = target / (duration / 16);
+            let current = 0;
+
+            function updateCounter() {
+                current += step;
+                if (current < target) {
+                    counter.textContent = Math.floor(current);
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    counter.textContent = target;
+                }
+            }
+
+            updateCounter();
+        });
+    }
+
+    // Fire counters once hero is visible
+    let countersStarted = false;
+    const heroObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !countersStarted) {
+            countersStarted = true;
+            animateCounters();
+        }
+    }, { threshold: 0.3 });
+
+    const heroSection = document.getElementById('home');
+    if (heroSection) heroObserver.observe(heroSection);
+
+    // ---- Scroll Reveal ----
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -40px 0px'
+    });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ---- Navbar Scroll ----
+    const navbar = document.getElementById('navbar');
+    const backToTop = document.getElementById('backToTop');
+
+    window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
+
+        // Navbar bg
+        if (scrollY > 60) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+
+        // Back to top
+        if (scrollY > 500) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+
+        // Active nav link
+        const sections = document.querySelectorAll('section[id]');
+        let current = '';
+        sections.forEach(section => {
+            const top = section.offsetTop - 100;
+            if (scrollY >= top) {
+                current = section.getAttribute('id');
+            }
+        });
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) {
+                link.classList.add('active');
+            }
+        });
+    });
+
+    // ---- Back to Top ----
+    if (backToTop) {
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // ---- Smooth Scroll ----
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // Close mobile menu
+                navMenu.classList.remove('active');
+                navToggle.classList.remove('active');
+            }
+        });
+    });
+
+    // ---- Mobile Nav Toggle ----
+    const navToggle = document.getElementById('navToggle');
+    const navMenu = document.getElementById('navMenu');
+
+    if (navToggle && navMenu) {
+        navToggle.addEventListener('click', () => {
+            navToggle.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+    }
+
+    // ---- Project Filtering ----
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Update active button
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const filter = btn.getAttribute('data-filter');
+
+            projectCards.forEach((card, idx) => {
+                const category = card.getAttribute('data-category');
+                if (filter === 'all' || category === filter) {
+                    card.classList.remove('hidden');
+                    card.style.animation = `fadeInUp 0.4s ${idx * 0.05}s ease both`;
+                } else {
+                    card.classList.add('hidden');
+                    card.style.animation = 'none';
+                }
+            });
+        });
+    });
+
+})();
