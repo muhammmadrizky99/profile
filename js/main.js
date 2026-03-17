@@ -441,45 +441,34 @@
     ];
 
     if (commentForm && commentsList) {
-        // Initialize comments from localStorage or use defaults
-        let comments = JSON.parse(localStorage.getItem('portfolio_comments')) || defaultComments;
-
-        // Save defaults if it's the first time
-        if (!localStorage.getItem('portfolio_comments')) {
-            localStorage.setItem('portfolio_comments', JSON.stringify(comments));
-        }
-
-        const renderComments = () => {
-            commentsList.innerHTML = '';
-
-            if (comments.length === 0) {
-                commentsList.innerHTML = '<div class="no-comments">Be the first to leave a comment!</div>';
-                return;
-            }
-
-            // Sort by date descending (newest first)
-            const sortedComments = [...comments].sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            sortedComments.forEach(comment => {
-                const dateObj = new Date(comment.date);
-                const dateString = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-                const initial = comment.name.charAt(0).toUpperCase();
-
-                const commentEl = document.createElement('div');
-                commentEl.className = 'comment-item';
-                commentEl.innerHTML = `
-                    <div class="comment-header">
-                        <div class="comment-author">
-                            <div class="comment-avatar">${initial}</div>
-                            <span>${escapeHtml(comment.name)}</span>
-                        </div>
-                        <div class="comment-date">${dateString}</div>
-                    </div>
-                    <div class="comment-text">${escapeHtml(comment.text).replace(/\n/g, '<br>')}</div>
-                `;
-                commentsList.appendChild(commentEl);
-            });
+        // --- 1. SETTING FIREBASE (HARUS DIGANTI DENGAN CONFIG ANDA) ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyDy5Kh5NS1r0jYDdxhCDhMoOe1aPXhKQ5M",
+            authDomain: "portfoliorizky-381e4.firebaseapp.com",
+            projectId: "portfoliorizky-381e4",
+            storageBucket: "portfoliorizky-381e4.firebasestorage.app",
+            messagingSenderId: "424028464873",
+            appId: "1:424028464873:web:d3b7a61ca0e9b79dc9b278",
+            measurementId: "G-W7NZ43LYJT"
         };
+
+        let db;
+        let isFirebaseConfigured = false;
+
+        // Cek apakah config sudah diganti (belum dikonfigurasi jika masih ada teks placeholder)
+        if (firebaseConfig.projectId !== "ISI_PROJECT_ID_ANDA_DISINI") {
+            try {
+                // Initialize Firebase
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+                isFirebaseConfigured = true;
+                console.log("Firebase berhasil diinisialisasi!");
+            } catch (error) {
+                console.error("Error saat inisialisasi Firebase:", error);
+            }
+        } else {
+            console.warn("Firebase belum dikonfigurasi. Menggunakan localStorage sebagai fallback sementara.");
+        }
 
         const escapeHtml = (unsafe) => {
             return unsafe
@@ -490,17 +479,74 @@
                 .replace(/'/g, "&#039;");
         };
 
-        // Render initial comments
-        renderComments();
+        const renderComments = (commentsArray) => {
+            commentsList.innerHTML = '';
+
+            if (commentsArray.length === 0) {
+                commentsList.innerHTML = '<div class="no-comments">Belum ada komentar. Jadilah yang pertama!</div>';
+                return;
+            }
+
+            // Sort by date descending (newest first)
+            const sortedComments = [...commentsArray].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            sortedComments.forEach(comment => {
+                const dateObj = new Date(comment.date);
+                const dateString = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                // Check if name exists to prevent error, fallback to 'Anonymous'
+                const nameStr = comment.name || 'Anonymous';
+                const initial = nameStr.charAt(0).toUpperCase();
+
+                const commentEl = document.createElement('div');
+                commentEl.className = 'comment-item';
+                commentEl.innerHTML = `
+                    <div class="comment-header">
+                        <div class="comment-author">
+                            <div class="comment-avatar">${initial}</div>
+                            <span>${escapeHtml(nameStr)}</span>
+                        </div>
+                        <div class="comment-date">${dateString}</div>
+                    </div>
+                    <div class="comment-text">${escapeHtml(comment.text || '').replace(/\n/g, '<br>')}</div>
+                `;
+                commentsList.appendChild(commentEl);
+            });
+        };
+
+        if (isFirebaseConfigured) {
+            // LOAD DARI FIREBASE secara REALTIME
+            db.collection("comments").orderBy("date", "desc").onSnapshot((snapshot) => {
+                const fbComments = [];
+                snapshot.forEach((doc) => {
+                    fbComments.push(doc.data());
+                });
+                renderComments(fbComments);
+            }, (error) => {
+                console.error("Gagal mendapatkan komentar dari Firebase:", error);
+                commentsList.innerHTML = '<div class="no-comments">Gagal memuat komentar. Pastikan rules Firebase Firestore database Anda sudah benar (allow read, write;).</div>';
+            });
+        } else {
+            // FALLBACK LOCALSTORAGE (Jika Firebase belum disetting)
+            let localComments = JSON.parse(localStorage.getItem('portfolio_comments')) || defaultComments;
+            if (!localStorage.getItem('portfolio_comments')) {
+                localStorage.setItem('portfolio_comments', JSON.stringify(localComments));
+            }
+            renderComments(localComments);
+        }
 
         // Handle form submission
-        commentForm.addEventListener('submit', (e) => {
+        commentForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const nameInput = document.getElementById('commentName');
             const textInput = document.getElementById('commentText');
 
             if (nameInput.value.trim() === '' || textInput.value.trim() === '') return;
+
+            const submitBtn = commentForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
+            submitBtn.disabled = true;
 
             const newComment = {
                 id: Date.now(),
@@ -509,27 +555,49 @@
                 date: new Date().toISOString()
             };
 
-            // Add to start of array
-            comments.unshift(newComment);
+            if (isFirebaseConfigured) {
+                try {
+                    // SIMPAN KE FIREBASE
+                    await db.collection("comments").add(newComment);
 
-            // Save to local storage
-            localStorage.setItem('portfolio_comments', JSON.stringify(comments));
+                    // Reset form
+                    commentForm.reset();
 
-            // Re-render
-            renderComments();
+                    // Show success feedback
+                    submitBtn.innerHTML = '<i class="fas fa-check"></i> Posted!';
+                    submitBtn.style.background = '#06b6d4';
+                    setTimeout(() => {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.style.background = '';
+                        submitBtn.disabled = false;
+                    }, 2000);
+                } catch (error) {
+                    console.error("Error menambah komentar ke Firebase:", error);
+                    submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Gagal! Cek Console';
+                    submitBtn.style.background = '#ef4444';
+                    setTimeout(() => {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.style.background = '';
+                        submitBtn.disabled = false;
+                    }, 3000);
+                }
+            } else {
+                // FALLBACK MENGGUNAKAN LOCALSTORAGE
+                let localComments = JSON.parse(localStorage.getItem('portfolio_comments')) || defaultComments;
+                localComments.unshift(newComment);
+                localStorage.setItem('portfolio_comments', JSON.stringify(localComments));
+                renderComments(localComments);
 
-            // Reset form
-            commentForm.reset();
+                commentForm.reset();
 
-            // Show a simple visual feedback
-            const submitBtn = commentForm.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-check"></i> Posted!';
-            submitBtn.style.background = '#06b6d4';
-            setTimeout(() => {
-                submitBtn.innerHTML = originalText;
-                submitBtn.style.background = '';
-            }, 2000);
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> Posted (Offline)!';
+                submitBtn.style.background = '#06b6d4';
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.style.background = '';
+                    submitBtn.disabled = false;
+                }, 2000);
+            }
         });
     }
 
