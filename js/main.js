@@ -300,7 +300,7 @@
         // Collect direct reveal children or reveal cards
         const reveals = container.querySelectorAll('.reveal');
         reveals.forEach((el, index) => {
-            el.style.setProperty('--stagger-delay', `${index * 0.08}s`);
+            el.style.setProperty('--stagger-delay', `${index * 0.03}s`);
         });
     });
 
@@ -406,7 +406,7 @@
                 const category = card.getAttribute('data-category');
                 if (filter === 'all' || category === filter) {
                     card.classList.remove('hidden');
-                    card.style.animation = `fadeInUp 0.4s ${idx * 0.05}s ease both`;
+                    card.style.animation = `fadeInUp 0.3s ${idx * 0.02}s ease both`;
                 } else {
                     card.classList.add('hidden');
                     card.style.animation = 'none';
