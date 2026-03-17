@@ -279,7 +279,7 @@
         if (entries[0].isIntersecting) {
             if (!counterTimer) {
                 animateCounters();
-                counterTimer = setInterval(animateCounters, 3500); // Wait 1.5s after 2s duration
+                counterTimer = setInterval(animateCounters, 6000); // 2s animate + 4s wait to read
             }
         } else {
             if (counterTimer) {
@@ -300,7 +300,7 @@
         // Collect direct reveal children or reveal cards
         const reveals = container.querySelectorAll('.reveal');
         reveals.forEach((el, index) => {
-            el.style.setProperty('--stagger-delay', `${index * 0.15}s`);
+            el.style.setProperty('--stagger-delay', `${index * 0.08}s`);
         });
     });
 
