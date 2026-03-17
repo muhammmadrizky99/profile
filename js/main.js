@@ -426,4 +426,111 @@
         });
     }
 
+    // ---- Comments Section System ----
+    const commentForm = document.getElementById('commentForm');
+    const commentsList = document.getElementById('commentsList');
+
+    // Default initial comments to make it look active
+    const defaultComments = [
+        {
+            id: 1,
+            name: 'Ahmad Kasim',
+            text: 'keren euyyy',
+            date: new Date(Date.now() - 3600000 * 5).toISOString()
+        }
+    ];
+
+    if (commentForm && commentsList) {
+        // Initialize comments from localStorage or use defaults
+        let comments = JSON.parse(localStorage.getItem('portfolio_comments')) || defaultComments;
+
+        // Save defaults if it's the first time
+        if (!localStorage.getItem('portfolio_comments')) {
+            localStorage.setItem('portfolio_comments', JSON.stringify(comments));
+        }
+
+        const renderComments = () => {
+            commentsList.innerHTML = '';
+
+            if (comments.length === 0) {
+                commentsList.innerHTML = '<div class="no-comments">Be the first to leave a comment!</div>';
+                return;
+            }
+
+            // Sort by date descending (newest first)
+            const sortedComments = [...comments].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            sortedComments.forEach(comment => {
+                const dateObj = new Date(comment.date);
+                const dateString = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                const initial = comment.name.charAt(0).toUpperCase();
+
+                const commentEl = document.createElement('div');
+                commentEl.className = 'comment-item';
+                commentEl.innerHTML = `
+                    <div class="comment-header">
+                        <div class="comment-author">
+                            <div class="comment-avatar">${initial}</div>
+                            <span>${escapeHtml(comment.name)}</span>
+                        </div>
+                        <div class="comment-date">${dateString}</div>
+                    </div>
+                    <div class="comment-text">${escapeHtml(comment.text).replace(/\n/g, '<br>')}</div>
+                `;
+                commentsList.appendChild(commentEl);
+            });
+        };
+
+        const escapeHtml = (unsafe) => {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        };
+
+        // Render initial comments
+        renderComments();
+
+        // Handle form submission
+        commentForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const nameInput = document.getElementById('commentName');
+            const textInput = document.getElementById('commentText');
+
+            if (nameInput.value.trim() === '' || textInput.value.trim() === '') return;
+
+            const newComment = {
+                id: Date.now(),
+                name: nameInput.value.trim(),
+                text: textInput.value.trim(),
+                date: new Date().toISOString()
+            };
+
+            // Add to start of array
+            comments.unshift(newComment);
+
+            // Save to local storage
+            localStorage.setItem('portfolio_comments', JSON.stringify(comments));
+
+            // Re-render
+            renderComments();
+
+            // Reset form
+            commentForm.reset();
+
+            // Show a simple visual feedback
+            const submitBtn = commentForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-check"></i> Posted!';
+            submitBtn.style.background = '#06b6d4';
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.style.background = '';
+            }, 2000);
+        });
+    }
+
 })();
