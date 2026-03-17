@@ -10,6 +10,8 @@
     window.addEventListener('load', () => {
         const preloader = document.getElementById('preloader');
         const statusEl = preloader.querySelector('.loader-status');
+        const pctEl = document.getElementById('loaderPercentage');
+
         const statusTexts = ['Initializing...', 'Loading assets...', 'Almost ready...', 'Welcome!'];
         let statusIdx = 0;
 
@@ -20,10 +22,61 @@
             }
         }, 600);
 
-        setTimeout(() => {
-            clearInterval(statusInterval);
-            preloader.classList.add('hidden');
-        }, 2500);
+        // Percentage Animation
+        let count = 0;
+        const totalDuration = 2400; // 2.4s to match CSS mostly
+        const intervalTime = 20;
+        const steps = totalDuration / intervalTime;
+        const increment = 100 / steps;
+
+        const counterInterval = setInterval(() => {
+            count += increment;
+            if (count >= 100) {
+                count = 100;
+                clearInterval(counterInterval);
+
+                // Hide other loader elements and enter epic countdown mode
+                const loaderContainer = document.querySelector('.cyber-loader');
+                if (loaderContainer) loaderContainer.classList.add('countdown-mode');
+
+                let countdown = 5;
+                if (pctEl) {
+                    pctEl.removeAttribute('style'); // Clear any inline styles
+                    pctEl.textContent = `0${countdown}`;
+                    pctEl.classList.remove('tick');
+                    void pctEl.offsetWidth; // trigger reflow
+                    pctEl.classList.add('tick');
+                }
+
+                const cdInterval = setInterval(() => {
+                    countdown--;
+                    if (countdown > 0) {
+                        if (pctEl) {
+                            pctEl.textContent = `0${countdown}`;
+                            // Retrigger pop animation
+                            pctEl.classList.remove('tick');
+                            void pctEl.offsetWidth;
+                            pctEl.classList.add('tick');
+                        }
+                    } else if (countdown === 0) {
+                        if (pctEl) {
+                            pctEl.textContent = 'KUY!';
+                            pctEl.classList.remove('tick');
+                            pctEl.classList.add('go');
+                        }
+                    } else {
+                        clearInterval(cdInterval);
+                        clearInterval(statusInterval);
+                        if (preloader) preloader.classList.add('hidden');
+                    }
+                }, 500); // 500ms per digit for a snappier countdown
+
+            } else {
+                if (pctEl) {
+                    pctEl.textContent = Math.floor(count) + '%';
+                }
+            }
+        }, intervalTime);
     });
 
     // ---- Particle Canvas ----
@@ -46,10 +99,13 @@
             reset() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.6;
-                this.speedY = (Math.random() - 0.5) * 0.6;
-                this.opacity = Math.random() * 0.5 + 0.1;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.8;
+                this.speedY = (Math.random() - 0.5) * 0.8;
+                this.opacity = Math.random() * 0.6 + 0.2;
+
+                const colors = ['#6c63ff', '#a855f7', '#06b6d4', '#f472b6'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
             }
             update() {
                 this.x += this.speedX;
@@ -71,8 +127,10 @@
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(108, 99, 255, ${this.opacity})`;
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
                 ctx.fill();
+                ctx.globalAlpha = 1.0;
             }
         }
 
@@ -91,13 +149,21 @@
                     const dy = particles[a].y - particles[b].y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
                     if (dist < 150) {
-                        const opacity = 0.08 * (1 - dist / 150);
+                        const opacity = 0.15 * (1 - dist / 150);
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(108, 99, 255, ${opacity})`;
-                        ctx.lineWidth = 0.6;
+
+                        // Create a gradient line between the two particles
+                        const grad = ctx.createLinearGradient(particles[a].x, particles[a].y, particles[b].x, particles[b].y);
+                        grad.addColorStop(0, particles[a].color);
+                        grad.addColorStop(1, particles[b].color);
+
+                        ctx.strokeStyle = grad;
+                        ctx.globalAlpha = opacity;
+                        ctx.lineWidth = 0.8;
                         ctx.moveTo(particles[a].x, particles[a].y);
                         ctx.lineTo(particles[b].x, particles[b].y);
                         ctx.stroke();
+                        ctx.globalAlpha = 1.0;
                     }
                 }
             }
@@ -327,5 +393,16 @@
             });
         });
     });
+
+    // ---- 3D Tilt Effect Initialization ----
+    if (typeof VanillaTilt !== 'undefined') {
+        VanillaTilt.init(document.querySelectorAll(".glass-card"), {
+            max: 8,
+            speed: 400,
+            glare: true,
+            "max-glare": 0.2,
+            scale: 1.02,
+        });
+    }
 
 })();

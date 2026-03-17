@@ -23,30 +23,28 @@
 <body>
     <!-- Preloader -->
     <div id="preloader">
-        <div class="loader-container">
-            <div class="loader-orbit">
-                <div class="loader-orbit-ring ring-1"></div>
-                <div class="loader-orbit-ring ring-2"></div>
-                <div class="loader-orbit-ring ring-3"></div>
-                <div class="loader-orbit-dot dot-1"></div>
-                <div class="loader-orbit-dot dot-2"></div>
-                <div class="loader-orbit-dot dot-3"></div>
+        <div class="cyber-loader">
+            <div class="cyber-rings-container">
+                <div class="cyber-ring ring-1"></div>
+                <div class="cyber-ring ring-2"></div>
+                <div class="cyber-ring ring-3"></div>
+                <div class="ring-core"></div>
+                <div class="cyber-logo">
+                    <span class="cyber-bracket">[</span>
+                    <i class="fas fa-meteor cyber-text"></i>
+                    <span class="cyber-bracket">]</span>
+                </div>
             </div>
-            <div class="loader-logo">
-                <span class="loader-logo-bracket">&lt;</span>
-                <span class="loader-logo-text">MR</span>
-                <span class="loader-logo-bracket">/&gt;</span>
+            <div class="cyber-loading-text">
+                <div class="glitch-text" data-text="SYSTEM OPTIMIZING">SYSTEM OPTIMIZING</div>
+                <div class="loader-status">Initializing...</div>
+                <div class="cyber-percentage" id="loaderPercentage">0%</div>
             </div>
-            <div class="loader-code-lines">
-                <span class="code-line" style="--delay: 0s">&lt;portfolio&gt;</span>
-                <span class="code-line" style="--delay: 0.3s">loading_assets();</span>
-                <span class="code-line" style="--delay: 0.6s">init_experience();</span>
-                <span class="code-line" style="--delay: 0.9s">&lt;/portfolio&gt;</span>
+            <div class="cyber-progress">
+                <div class="cyber-progress-track">
+                    <div class="cyber-progress-fill"></div>
+                </div>
             </div>
-            <div class="loader-progress">
-                <div class="loader-progress-bar"></div>
-            </div>
-            <div class="loader-status">Initializing...</div>
         </div>
     </div>
 
@@ -57,7 +55,7 @@
     <nav class="navbar" id="navbar">
         <div class="container nav-container">
             <a href="#home" class="nav-logo">
-                <span class="logo-bracket">&lt;</span>MR<span class="logo-bracket">/&gt;</span>
+                <span class="logo-bracket"></span><span class="logo-bracket"></span>
             </a>
             <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
                 <span></span><span></span><span></span>
@@ -75,13 +73,22 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
+        <!-- Ambient Glowing Orbs -->
+        <div class="ambient-orbs">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+
         <canvas id="particleCanvas"></canvas>
         <div class="hero-content">
-            <div class="hero-badge">👋 Welcome to my portfolio</div>
+            <div class="hero-badge">Welcome to my portfolio</div>
             <div class="hero-profile">
                 <div class="hero-image-wrapper">
-                    <img src="image/prof.jpg" alt="Muhammad Rizky" class="hero-image" loading="eager">
-                    <div class="hero-image-ring"></div>
+                    <div class="profile-ring profile-ring-3"></div>
+                    <div class="profile-ring profile-ring-1"></div>
+                    <div class="profile-ring profile-ring-2"></div>
+                    <img src="image/prof.png" alt="Muhammad Rizky" class="hero-image" loading="eager">
                 </div>
             </div>
             <h1 class="hero-title">
@@ -134,7 +141,7 @@
             <div class="about-grid about-grid-full">
                 <div class="about-text-col reveal reveal-right">
                     <div class="about-card glass-card">
-                        <h3 class="about-greeting">Hello There! <span class="wave">👋</span></h3>
+                        <h3 class="about-greeting">Hello There!</h3>
                         <p class="about-intro">
                             My name is <strong class="gradient-text">Muhammad Rizky</strong>.
                             I'm a Technology Information student specializing in <strong>Software Engineering
@@ -193,6 +200,24 @@
             </div>
             <div class="skills-grid">
                 <div class="skill-card glass-card reveal">
+                    <div class="skill-icon" style="--accent: #764ABC;">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>Backend Development</h3>
+                    <p>Developing robust server-side applications and RESTful APIs with PHP, Laravel, and MySQL.</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Node.js</span>
+                        <span class="skill-tag">Express.js</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">PHP</span>
+                        <span class="skill-tag">Laravel</span>
+                        <span class="skill-tag">MySQL</span>
+                        <span class="skill-tag">PostgreSQL</span>
+                        <span class="skill-tag">REST API</span>
+                        <span class="skill-tag">Git</span>
+                    </div>
+                </div>
+                <div class="skill-card glass-card reveal">
                     <div class="skill-icon" style="--accent: #61DAFB;">
                         <i class="fas fa-code"></i>
                     </div>
@@ -225,24 +250,7 @@
                         <span class="skill-tag">REST API</span>
                     </div>
                 </div>
-                <div class="skill-card glass-card reveal">
-                    <div class="skill-icon" style="--accent: #764ABC;">
-                        <i class="fas fa-server"></i>
-                    </div>
-                    <h3>Backend Development</h3>
-                    <p>Developing robust server-side applications and RESTful APIs with PHP, Laravel, and MySQL.</p>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Node.js</span>
-                        <span class="skill-tag">Express.js</span>
-                        <span class="skill-tag">JavaScript</span>
-                        <span class="skill-tag">PHP</span>
-                        <span class="skill-tag">Laravel</span>
-                        <span class="skill-tag">MySQL</span>
-                        <span class="skill-tag">PostgreSQL</span>
-                        <span class="skill-tag">REST API</span>
-                        <span class="skill-tag">Git</span>
-                    </div>
-                </div>
+
                 <div class="skill-card glass-card reveal">
                     <div class="skill-icon" style="--accent: #F7931E;">
                         <i class="fas fa-brain"></i>
@@ -357,7 +365,8 @@
                         <p class="project-text">College major recommendation system based on interests, abilities, and
                             academic achievements using decision tree algorithm.</p>
                         <div class="project-tech">
-                            <span>Python</span><span>Decision Tree</span><span>ML</span>
+                            <span>JavaScript</span><span>Python</span><span>Decision
+                                Tree</span><span>ML</span><span>PostgreSQL</span>
                         </div>
                     </div>
                 </div>
@@ -375,7 +384,7 @@
                         <p class="project-text">Flutter-based E-commerce application with modern, responsive design and
                             cross-platform compatibility.</p>
                         <div class="project-tech">
-                            <span>Flutter</span><span>Dart</span><span>Firebase</span>
+                            <span>Flutter</span><span>API</span><span>Dart</span><span>MySQL</span>
                         </div>
                     </div>
                 </div>
@@ -411,7 +420,7 @@
                         <p class="project-text">Web-based car rental information system for easy booking, management,
                             and vehicle rental processes.</p>
                         <div class="project-tech">
-                            <span>PHP</span><span>PostgreSQL</span><span>CSS</span>
+                            <span>JavaScript</span><span>Node.js</span><span>PostgreSQL</span><span>CSS</span>
                         </div>
                     </div>
                 </div>
@@ -453,6 +462,28 @@
                     </div>
                 </div>
 
+                <!-- Project 8 -->
+                <div class="project-card glass-card reveal" data-category="web">
+                    <div class="project-image-wrapper">
+                        <img src="image/pro2.png" alt="IT Ventory" class="project-image" loading="lazy">
+                        <div class="project-overlay">
+                            <span class="project-category">Web App</span>
+                            <a href="https://youtu.be/-VWss7e56OU?si=fgckbKaetXu32Lji" target="_blank" rel="noopener"
+                                class="project-link">
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">IT Ventory</h3>
+                        <p class="project-text">Laravel-based IT lab inventory management system. Project-Based
+                            Learning Politeknik Negeri Padang.</p>
+                        <div class="project-tech">
+                            <span>Laravel</span><span>PHP</span><span>MySQL</span>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Project 7 -->
                 <div class="project-card glass-card reveal" data-category="web">
                     <div class="project-image-wrapper">
@@ -471,27 +502,7 @@
                     </div>
                 </div>
 
-                <!-- Project 8 -->
-                <div class="project-card glass-card reveal" data-category="web">
-                    <div class="project-image-wrapper">
-                        <img src="image/pro2.png" alt="IT Ventory" class="project-image" loading="lazy">
-                        <div class="project-overlay">
-                            <span class="project-category">Web App</span>
-                            <a href="https://youtu.be/-VWss7e56OU?si=fgckbKaetXu32Lji" target="_blank" rel="noopener"
-                                class="project-link">
-                                <i class="fas fa-external-link-alt"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="project-body">
-                        <h3 class="project-title">IT Ventory</h3>
-                        <p class="project-text">Laravel-based IT lab inventory management system. Project-Based
-                            Learning.</p>
-                        <div class="project-tech">
-                            <span>Laravel</span><span>PHP</span><span>MySQL</span>
-                        </div>
-                    </div>
-                </div>
+
 
                 <!-- Project 9 -->
                 <div class="project-card glass-card reveal" data-category="web">
@@ -656,6 +667,17 @@
             </div>
             <div class="certificates-grid">
                 <div class="cert-card glass-card reveal">
+                    <a href="image/sertif/sertifikat-pandu-literasi-digital.pdf" target="_blank" rel="noopener" style="display: block; text-decoration: none; color: inherit;">
+                        <div class="cert-image-wrapper">
+                            <img src="image/sertif/sertifthumb.png" alt="Sertifikat Fasilitasi Pandu Literasi Digital" class="cert-image" loading="lazy">
+                        </div>
+                        <div class="cert-body">
+                            <h4>Fasilitasi Pandu Literasi Digital</h4>
+                            <p style="font-size: 0.8rem; color: var(--accent-3); margin-top: 5px;">View Certificate (PDF)</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="cert-card glass-card reveal">
                     <div class="cert-image-wrapper">
                         <img src="image/sertif/Screenshot (44).png" alt="Cybersecurity Course" class="cert-image"
                             loading="lazy">
@@ -806,7 +828,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <span class="logo-bracket">&lt;</span>MR<span class="logo-bracket">/&gt;</span>
+                    <span class="logo-bracket"></span><span class="logo-bracket"></span>
                 </div>
                 <p class="footer-text">&copy; 2024 Muhammad Rizky. Crafted with <span class="heart">❤️</span> and lots
                     of ☕</p>
@@ -825,6 +847,8 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
+    <!-- Tilt.js for 3D Glass Cards -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
     <script src="js/main.js"></script>
 </body>
 
