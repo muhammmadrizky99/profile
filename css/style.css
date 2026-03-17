@@ -1508,24 +1508,26 @@ button {
     box-shadow: 0 8px 30px rgba(108, 99, 255, 0.4);
 }
 
-/* ---------- Reveal Animations ---------- */
+/* ---------- Reveal Animations (3D Cascading Stack) ---------- */
 .reveal {
     opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+    transform: perspective(1000px) rotateX(-15deg) translateY(60px) scale(0.95);
+    transform-origin: top center;
+    transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+    transition-delay: var(--stagger-delay, 0s);
 }
 
 .reveal.reveal-left {
-    transform: translateX(-40px);
+    transform: perspective(1000px) rotateY(15deg) translateX(-60px) scale(0.95);
 }
 
 .reveal.reveal-right {
-    transform: translateX(40px);
+    transform: perspective(1000px) rotateY(-15deg) translateX(60px) scale(0.95);
 }
 
 .reveal.active {
     opacity: 1;
-    transform: translate(0);
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translate(0) scale(1);
 }
 
 /* ---------- Animations ---------- */

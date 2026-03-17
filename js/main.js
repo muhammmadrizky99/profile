@@ -69,7 +69,7 @@
                         clearInterval(statusInterval);
                         if (preloader) preloader.classList.add('hidden');
                     }
-                }, 500); // 500ms per digit for a snappier countdown
+                }, 300); // 500ms per digit for a snappier countdown
 
             } else {
                 if (pctEl) {
@@ -273,28 +273,49 @@
         });
     }
 
-    // Fire counters once hero is visible
-    let countersStarted = false;
+    // Fire counters repeatedly when hero is visible
+    let counterTimer = null;
     const heroObserver = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && !countersStarted) {
-            countersStarted = true;
-            animateCounters();
+        if (entries[0].isIntersecting) {
+            if (!counterTimer) {
+                animateCounters();
+                counterTimer = setInterval(animateCounters, 3500); // Wait 1.5s after 2s duration
+            }
+        } else {
+            if (counterTimer) {
+                clearInterval(counterTimer);
+                counterTimer = null;
+            }
         }
     }, { threshold: 0.3 });
 
     const heroSection = document.getElementById('home');
     if (heroSection) heroObserver.observe(heroSection);
 
-    // ---- Scroll Reveal ----
+    // ---- Scroll Reveal (Susun-Susun / Stacking) ----
+
+    // Assign structural delays to children of grids
+    const revealContainers = document.querySelectorAll('.about-grid, .skills-grid, .projects-grid, .certificates-grid, .social-grid');
+    revealContainers.forEach(container => {
+        // Collect direct reveal children or reveal cards
+        const reveals = container.querySelectorAll('.reveal');
+        reveals.forEach((el, index) => {
+            el.style.setProperty('--stagger-delay', `${index * 0.15}s`);
+        });
+    });
+
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
+            } else {
+                // Remove active class when out of view so it staggers again next time
+                entry.target.classList.remove('active');
             }
         });
     }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -40px 0px'
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
     });
 
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
