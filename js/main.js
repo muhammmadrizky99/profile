@@ -9,74 +9,8 @@
     // ---- Preloader ----
     window.addEventListener('load', () => {
         const preloader = document.getElementById('preloader');
-        const statusEl = preloader.querySelector('.loader-status');
-        const pctEl = document.getElementById('loaderPercentage');
-
-        const statusTexts = ['Initializing...', 'Loading assets...', 'Almost ready...', 'Welcome!'];
-        let statusIdx = 0;
-
-        const statusInterval = setInterval(() => {
-            statusIdx++;
-            if (statusIdx < statusTexts.length) {
-                statusEl.textContent = statusTexts[statusIdx];
-            }
-        }, 600);
-
-        // Percentage Animation
-        let count = 0;
-        const totalDuration = 2400; // 2.4s to match CSS mostly
-        const intervalTime = 20;
-        const steps = totalDuration / intervalTime;
-        const increment = 100 / steps;
-
-        const counterInterval = setInterval(() => {
-            count += increment;
-            if (count >= 100) {
-                count = 100;
-                clearInterval(counterInterval);
-
-                // Hide other loader elements and enter epic countdown mode
-                const loaderContainer = document.querySelector('.cyber-loader');
-                if (loaderContainer) loaderContainer.classList.add('countdown-mode');
-
-                let countdown = 5;
-                if (pctEl) {
-                    pctEl.removeAttribute('style'); // Clear any inline styles
-                    pctEl.textContent = `0${countdown}`;
-                    pctEl.classList.remove('tick');
-                    void pctEl.offsetWidth; // trigger reflow
-                    pctEl.classList.add('tick');
-                }
-
-                const cdInterval = setInterval(() => {
-                    countdown--;
-                    if (countdown > 0) {
-                        if (pctEl) {
-                            pctEl.textContent = `0${countdown}`;
-                            // Retrigger pop animation
-                            pctEl.classList.remove('tick');
-                            void pctEl.offsetWidth;
-                            pctEl.classList.add('tick');
-                        }
-                    } else if (countdown === 0) {
-                        if (pctEl) {
-                            pctEl.textContent = 'KUY!';
-                            pctEl.classList.remove('tick');
-                            pctEl.classList.add('go');
-                        }
-                    } else {
-                        clearInterval(cdInterval);
-                        clearInterval(statusInterval);
-                        if (preloader) preloader.classList.add('hidden');
-                    }
-                }, 300); // 500ms per digit for a snappier countdown
-
-            } else {
-                if (pctEl) {
-                    pctEl.textContent = Math.floor(count) + '%';
-                }
-            }
-        }, intervalTime);
+        if (!preloader) return;
+        window.setTimeout(() => preloader.classList.add('hidden'), 350);
     });
 
     // ---- Particle Canvas ----
@@ -213,12 +147,11 @@
     const typingEl = document.getElementById('typingText');
     if (typingEl) {
         const texts = [
-            'Software Engineer',
-            'UI/UX Designer',
-            'Full Stack Developer',
-            'Machine Learning Enthusiast',
-            'Graphic Designer',
-            'Creative Problem Solver'
+            'Junior Backend Developer',
+            'Laravel & Node.js Developer',
+            'REST API Builder',
+            'Database-Focused Engineer',
+            'Full Stack Developer'
         ];
         let textIdx = 0;
         let charIdx = 0;
@@ -252,12 +185,33 @@
     }
 
     // ---- Counter Animation ----
-    function animateCounters() {
+    function getStatTargets() {
+        return {
+            projects: document.querySelectorAll('.project-card').length,
+            certificates: document.querySelectorAll('.cert-card').length,
+            stacks: document.querySelectorAll('.skill-card').length
+        };
+    }
+
+    function syncCounters() {
+        const targets = getStatTargets();
         document.querySelectorAll('.stat-number').forEach(counter => {
-            const target = parseInt(counter.getAttribute('data-count'));
-            const duration = 2000;
+            const target = targets[counter.getAttribute('data-stat')];
+            if (Number.isFinite(target)) counter.textContent = target;
+        });
+        return targets;
+    }
+
+    function animateCounters() {
+        const targets = syncCounters();
+        document.querySelectorAll('.stat-number').forEach(counter => {
+            const target = targets[counter.getAttribute('data-stat')];
+            if (!Number.isFinite(target) || target === 0) return;
+
+            const duration = 1200;
             const step = target / (duration / 16);
             let current = 0;
+            counter.textContent = 0;
 
             function updateCounter() {
                 current += step;
@@ -290,7 +244,12 @@
     }, { threshold: 0.3 });
 
     const heroSection = document.getElementById('home');
-    if (heroSection) heroObserver.observe(heroSection);
+    syncCounters();
+    if (heroSection) {
+        heroObserver.observe(heroSection);
+    } else {
+        animateCounters();
+    }
 
     // ---- Scroll Reveal (Susun-Susun / Stacking) ----
 
